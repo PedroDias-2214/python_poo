@@ -1,5 +1,5 @@
 from frota import *
-
+import pickle
 
 def operar_carro(carro: Carro):
     print('1- Ligar motor')
@@ -23,6 +23,7 @@ def operar_carro(carro: Carro):
 
 
 if __name__ == "__main__":
+
     print('Cadastre o carro 1')
     nm_modelo = input('Digite o modelo: ')
     nm_marca = input('Digite a marca: ')
@@ -32,7 +33,7 @@ if __name__ == "__main__":
 
     carro1 = Carro(nm_modelo, nm_marca, nm_cor, 0, motor=False, consumo_medio=consumo_medio, tanque=combustivel)
 
-    print('Cadastre o carro 2')
+    print('Cadastre o carro 1')
     nm_modelo = input('Digite o modelo: ')
     nm_marca = input('Digite a marca: ')
     nm_cor = input('Digite a cor: ')
@@ -41,11 +42,23 @@ if __name__ == "__main__":
 
     carro2 = Carro(nm_modelo, nm_marca, nm_cor, 0, motor=False, consumo_medio=consumo_medio, tanque=combustivel)
 
+    carros = {}
+    carros[id(carro1)] = carro1
+    carros[id(carro2)] = carro2
+
+
+    try:
+        with open('carros.pkl', 'wb') as arquivo:
+            pickle.dump(carros, arquivo)
+    except Exception as e:
+        print (e)
+
     '''
-    Controlando o carro até ele atingir 10000 Km
+    Controlando o carro até ele atingir 600 Km
     '''
-    while (carro1.odometro < 600 and carro2.odometro < 600) \
-            and (carro1.tanque > 0 and carro2.tanque > 0):
+
+    while (carro1.get_odometro() < 600 and carro2.get_odometro() < 600) \
+            and (carro1.get_tanque() > 0 and carro2.get_tanque() > 0):
         try:
             numero_carro = 0
             while numero_carro not in [1, 2]:
@@ -58,14 +71,14 @@ if __name__ == "__main__":
         except Exception as e:
             print("Erro!")
             print(e)
-    if carro1.motor_on: carro1.desligar()
-    if carro2.motor_on: carro2.desligar()
+    if carro1.get_motor_on(): carro1.desligar()
+    if carro2.get_motor_on(): carro2.desligar()
 
-    if carro1.odometro >= 600:
+    if carro1.get_odometro() >= 600:
         print('O carro 1 venceu a corrida')
-    elif carro2.odometro >= 600:
+    elif carro2.get_odometro() >= 600:
         print('O carro 2 venceu a corrida')
-    elif carro1.tanque == 0:
+    elif carro1.get_tanque() == 0:
         print('Acabou o tanque do carro 1')
     else:
         print('Acabou o tanque do carro 2')
