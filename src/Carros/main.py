@@ -1,4 +1,4 @@
-from frota import *
+from src.Carros.frota import *
 import pickle
 
 def operar_carro(carro: Carro):
